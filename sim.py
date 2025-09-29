@@ -45,4 +45,4 @@ def send_data():
 if __name__ == "__main__":
     while True:
         send_data()
-        time.sleep(180)  # Send data every 3 minutes
+        time.sleep(1200)  # Send data every 3 minutes
