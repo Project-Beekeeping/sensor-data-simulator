@@ -1,14 +1,15 @@
-import requests
+import os
 import random
 import time
 
-# API URL
-API_URL = "https://smart-nyuki-django-backend-development.up.railway.app/api/devices/sensor-readings/create/"
+import requests
 
-# Your authentication token
-# TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMDc3OTI3LCJpYXQiOjE3NTIwNzQzMjcsImp0aSI6ImI1MDFmOGVlMmRlMTQ5YjFiYWEyOTZkNmVkNzZmNjMzIiwidXNlcl9pZCI6IjdlYjE1OWY1LWMzYWEtNDRlYS1hMjk1LWViNGY5NjcwNDJiZCJ9.KRNp1M9ElbE23bLrQIKi36vKX3CTKS5qGKDQvaqlueQ"
-
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcyODg3Mzg0LCJpYXQiOjE3NzI4ODM3ODUsImp0aSI6IjVkNDgxNjg1YTk4YzQ2YmY5YTk5MTAyYjE3NDk4MGZlIiwidXNlcl9pZCI6IjdlYjE1OWY1LWMzYWEtNDRlYS1hMjk1LWViNGY5NjcwNDJiZCJ9.xjo77Gi9waMO4gar7G52Vmm1_aPFYneovXQYPYjmqxQ"
+API_URL = os.getenv(
+    "API_URL",
+    "https://smart-nyuki-django-backend-development.up.railway.app/api/devices/sensor-readings/create/",
+)
+TOKEN = os.getenv("API_TOKEN", "")
+SEND_INTERVAL_SECONDS = int(os.getenv("SEND_INTERVAL_SECONDS", "120"))
 
 # Headers with Bearer token
 HEADERS = {
@@ -36,15 +37,23 @@ def generate_sensor_data(device_serial):
 def send_data():
     for serial in DEVICE_SERIALS:
         data = generate_sensor_data(serial)
-        response = requests.post(API_URL, json=data, headers=HEADERS)
-        if response.status_code == 201:
-            print(f"[✓] Sent data for device {serial}")
-        else:
-            print(
-                f"[✗] Failed for device {serial}: {response.status_code} - {response.text}")
+        try:
+            response = requests.post(
+                API_URL, json=data, headers=HEADERS, timeout=15)
+            if response.status_code == 201:
+                print(f"[OK] Sent data for device {serial}")
+            else:
+                print(
+                    f"[FAIL] Device {serial}: {response.status_code} - {response.text}"
+                )
+        except requests.RequestException as exc:
+            print(f"[ERROR] Device {serial}: {exc}")
 
 
 if __name__ == "__main__":
+    if not TOKEN:
+        raise RuntimeError("Missing API_TOKEN environment variable")
+
     while True:
         send_data()
-        time.sleep(1200)  # Send data every 3 minutes
+        time.sleep(SEND_INTERVAL_SECONDS)
