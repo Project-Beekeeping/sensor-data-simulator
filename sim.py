@@ -8,9 +8,11 @@ API_URL = "https://smart-nyuki-django-backend-development.up.railway.app/api/dev
 # Your authentication token
 # TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMDc3OTI3LCJpYXQiOjE3NTIwNzQzMjcsImp0aSI6ImI1MDFmOGVlMmRlMTQ5YjFiYWEyOTZkNmVkNzZmNjMzIiwidXNlcl9pZCI6IjdlYjE1OWY1LWMzYWEtNDRlYS1hMjk1LWViNGY5NjcwNDJiZCJ9.KRNp1M9ElbE23bLrQIKi36vKX3CTKS5qGKDQvaqlueQ"
 
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcyODg3Mzg0LCJpYXQiOjE3NzI4ODM3ODUsImp0aSI6IjVkNDgxNjg1YTk4YzQ2YmY5YTk5MTAyYjE3NDk4MGZlIiwidXNlcl9pZCI6IjdlYjE1OWY1LWMzYWEtNDRlYS1hMjk1LWViNGY5NjcwNDJiZCJ9.xjo77Gi9waMO4gar7G52Vmm1_aPFYneovXQYPYjmqxQ"
+
 # Headers with Bearer token
 HEADERS = {
-    # "Authorization": f"Bearer {TOKEN}",
+    "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
 }
 
